@@ -1,0 +1,47 @@
+CC=gcc
+CXX=g++
+RM=rm -f
+CFLAGS=
+CFLAGS_LINUX=$(CFLAGS)
+CFLAGS_ANDROID=$(CFLAGS) -fPIE
+CPPFLAGS=-g -O2
+LDFLAGS=-g 
+LDFLAGS_LINUX=$(LDFLAGS)
+LDFLAGS_ANDROID=$(LDFLAGS) -pie
+LDLIBS=
+
+ANDROID_AARCH64=android-aarch64
+LINUX_AARCH64=linux-aarch64
+ANDROID_AARCH64_SUFFIX=-$(ANDROID_AARCH64)
+LINUX_AARCH64_SUFFIX=-$(LINUX_AARCH64)
+DC_ANDROID=../../scripts/dc$(ANDROID_AARCH64_SUFFIX)
+DC_LINUX=../../scripts/dc$(LINUX_AARCH64_SUFFIX)
+
+SRCS=example.c
+BINARY=example
+ANDROID_BINARY=$(BINARY)$(ANDROID_AARCH64_SUFFIX)
+LINUX_BINARY=$(BINARY)$(LINUX_AARCH64_SUFFIX)
+OBJS=$(subst .c,.o,$(SRCS)) $(LINUX_BINARY) $(ANDROID_BINARY)
+
+all: $(ANDROID_AARCH64) $(LINUX_AARCH64)
+
+android-aarch64:
+	$(DC_ANDROID) bash -c '$$CC $(CFLAGS_ANDROID) $(LDFLAGS_ANDROID) $(SRCS) -o $(ANDROID_BINARY)'
+
+linux-aarch64:
+	$(DC_LINUX) bash -c '$$CC $(CFLAGS_LINUX) $(LDFLAGS_LINUX) $(SRCS) -o $(LINUX_BINARY)'
+
+depend: .depend
+
+.depend: $(SRCS)
+	$(RM) ./.depend
+	$(CXX) $(CPPFLAGS) -MM $^>>./.depend;
+
+clean:
+	$(RM) $(OBJS)
+	$(RM) $(BINARY)	
+
+distclean: clean
+	$(RM) *~ .depend
+
+include .depend
