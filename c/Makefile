@@ -8,9 +8,6 @@ $(SUBDIRS):
 
 .PHONY: clean 
 clean:
-	ROOT=`/bin/pwd`; \
-    for dir in `find . ! -path . -type d -print`; \
-    do \
-		echo $$dir; \
-		make -C "$${dir}" -f "$${ROOT}"/Makefile clean; \
-	done
+	for dir in $(SUBDIRS); do \
+    	$(MAKE) -C $$dir -f Makefile $@; \
+    done	
