@@ -6,4 +6,5 @@ int main(){
   int result = i+j;
 
   printf("i + j equals %d\n", result);
+  return 0;
 }
