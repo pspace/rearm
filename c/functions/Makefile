@@ -45,8 +45,7 @@ linux-x86_64:
 	$(DC_LINUX_AMD64) bash -c '$$CC $(CFLAGS_LINUX) $(LDFLAGS_LINUX) $(SRCS) -o $(LINUX_AMD64_BINARY)'
 
 disas:
-#	python $(DISASSEMBLE_PY) $(CURDIR)/$(ANDROID_BINARY)
-	$(foreach bin,$(BINARIES),python $(DISASSEMBLE_PY) $(CURDIR)/$(bin) $(CMDSEP))
+	$(foreach bin,$(BINARIES),python $(DISASSEMBLE_PY) $(CURDIR)/$(bin) $(CURDIR)/functions $(CMDSEP))
 
 
 
